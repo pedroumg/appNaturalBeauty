@@ -1,4 +1,3 @@
-# fel
 
 ## Project setup
 ```
