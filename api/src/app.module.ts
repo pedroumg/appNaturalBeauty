@@ -9,7 +9,6 @@ import { UsuariopermisoModule } from './usuariopermiso/usuariopermiso.module';
 import { PersonaModule } from './persona/persona.module';
 import { VentasModule } from './ventas/ventas.module';
 import { VentadetalleModule } from './ventadetalle/ventadetalle.module';
-import { CreditosModule } from './creditos/creditos.module';
 @Module({
   imports: [
     //Data Base Conection
@@ -20,8 +19,8 @@ import { CreditosModule } from './creditos/creditos.module';
         host: config.get<string>('DATABASE_HOST'),
         port: parseInt(config.get<string>('DATABASE_PORT'),10),
         username: config.get<string>('DATABASE_USER'),
-        password: config.get<string>(''),
-        //password: config.get<string>('DATABASE_PASSWORD'),
+        //password: config.get<string>(''),
+        password: config.get<string>('DATABASE_PASSWORD'),
         database: config.get<string>('DATABASE_NAME'),
         entities: ["dist/**/*.entity{.ts,.js}"],
         synchronize: true,
@@ -39,8 +38,7 @@ import { CreditosModule } from './creditos/creditos.module';
     UsuariopermisoModule,
     PersonaModule,
     VentasModule,
-    VentadetalleModule,
-    CreditosModule
+    VentadetalleModule
   ]
 })
 export class AppModule {}

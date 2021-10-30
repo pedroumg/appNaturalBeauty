@@ -1,5 +1,4 @@
 import { CategoriaEntity } from "src/categoria/Entity";
-import { PersonaEntity } from "src/persona/Entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('articulo')
@@ -23,14 +22,12 @@ export class ArticuloEntity {
     @Column('text')
     descripcion:string;
     @Column({type:'varchar',length:100})
-    tipo:string;
-    @Column({type:'varchar',default:'Producto'})
+    imagen:string;
+    @Column({type:'varchar',default:'Activo'})
     estado:string;
     @ManyToOne(()=>CategoriaEntity,categoria=>categoria.idcategoria)
+    //@ManyToOne(type=>CategoriaEntity)
     @JoinColumn({ name: "idcategoria" })
+    //categoria:CategoriaEntity
     idcategoria:number;
-
-    @ManyToOne(()=>PersonaEntity,persona=>persona.idpersona)
-    @JoinColumn({ name: "idproveedor" })
-    idproveedor:number;
 }

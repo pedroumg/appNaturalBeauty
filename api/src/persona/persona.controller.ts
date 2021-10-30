@@ -10,9 +10,9 @@ import { PersonaService } from './persona.service';
 @Controller('api/v1/personas')
 export class PersonaController {
     constructor(private readonly personaService: PersonaService){}
-    @Get(':tipo')
-    async getAllItems(@Param('tipo') tipo:string){
-        return await this.personaService.getAllItems(tipo);
+    @Get()
+    async getAllItems(){
+        return await this.personaService.getAllItems();
     }
 
     @Post()

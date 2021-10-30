@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import clientes from '../components/Clientes/clientes.vuex'
+import clientes from '../components/Personas/clientes.vuex'
 import Auth from '../components/Auth/auth.vuex'
 import Categorias from '../components/Categorias/categoria.vuex'
 import Productos from '../components/Productos/productos.vuex'
@@ -15,8 +15,9 @@ export default new Vuex.Store({
     navigation:true,
     productos:[],
     auth:false,
-    urlprod:'http://[::1]:1990',
-    urlapi:'http://[::1]:1990/api/v1'
+    urlprod:'https://naturalbeauty.microsystems.com.gt',
+    urlapi:'https://naturalbeauty.microsystems.com.gt/api/v1'
+    //urlapi:'https://marmolerianicole.microsystems.com.gt/api/v1'
   },
   //Las mutations sirven para asignarle un valor a las variables del state
   mutations: {

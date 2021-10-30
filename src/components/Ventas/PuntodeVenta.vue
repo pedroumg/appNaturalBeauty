@@ -48,9 +48,7 @@
                       </td>
                       <td>
                         <v-text-field
-                          :value="
-                            item.cantidad * item.precioventa - item.descuento
-                          "
+                          :value="item.cantidad * item.precioventa - item.descuento"
                           dense
                           readonly
                         ></v-text-field>
@@ -69,7 +67,7 @@
           </v-row>
           <v-divider></v-divider>
           <v-row justify="center">
-            <v-col class="text-right" v-show="carrito.length > 0">
+            <v-col class="text-right" v-show="carrito.length>0">
               <h3>TOTAL: Q {{ sumatoria || 0.0 }}</h3>
               <p>Total Descuento: Q {{ totalDescuento || 0.0 }}</p>
               <v-btn
@@ -82,23 +80,13 @@
               </v-btn>
               <v-btn
                 class="ma-2"
-                color="orange accent-3"
-                v-show="sumatoria > 0"
-                @click="modalcliente = true,ventaCredito=true"
-                dark
-                large
-                ><v-icon class="mdi-20px" left>mdi-cash-multiple</v-icon
-                >Crédito</v-btn
-              >
-              <v-btn
-                class="ma-2"
                 color="green"
                 v-show="sumatoria > 0"
-                @click="modalcliente = true,ventaCredito=false"
+                @click="modalcliente = true"
                 dark
                 large
-                ><v-icon class="mdi-20px" left>mdi-cash-multiple</v-icon
-                >Contado</v-btn
+                ><v-icon class="mdi-24px" left>mdi-cash-multiple</v-icon>PAGAR Q
+                {{ sumatoria || 0.0 }}</v-btn
               >
             </v-col>
           </v-row>
@@ -177,12 +165,12 @@
                 v-model="editedItem.tipo"
                 :items="tipo"
                 label="Tipo documento"
-                @change="buscarVentaPorTipo"
+                @change="buscarVentaPorTipo"              
               ></v-select>
               <v-text-field
                 v-model="editedItem.serie"
                 label="Serie"
-                :readonly="editedItem.tipo !== 'Factura'"
+                :readonly="editedItem.tipo!=='Factura'"
               ></v-text-field>
               <v-text-field
                 v-model="editedItem.numero"
@@ -190,19 +178,12 @@
               ></v-text-field>
             </v-col>
           </v-row>
-          <v-row v-if="ventaCredito">
-            <v-col>
-              <h4>VENTA AL CREDITO</h4>
-            </v-col>
-          </v-row>
         </v-card-text>
         <v-divider></v-divider>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue-grey darken-2" @click="modalcliente = false" dark>
-            <v-icon left>mdi-keyboard-backspace</v-icon> Volver</v-btn
-          >
+          <v-btn color="blue-grey darken-2" @click="modalcliente = false" dark> <v-icon left>mdi-keyboard-backspace</v-icon> Volver</v-btn>
           <v-btn
             class="text-white"
             color="red"
@@ -212,7 +193,12 @@
           >
             REGISTRAR CLIENTE
           </v-btn>
-          <v-btn class="text-white" color="green" @click="postVenta" v-else>
+          <v-btn
+            class="text-white"
+            color="green"
+            @click="postVenta"
+            v-else
+          >
             REGISTRAR VENTA
           </v-btn>
         </v-card-actions>
@@ -239,7 +225,7 @@
 import currency from "@/utils/currency.js";
 import Swal from "sweetalert2";
 import axios from "axios";
-import findClienteSat from "@/utils/buscarNit";
+import findClienteSat from "../Personas/utils/find.cliente";
 //import moment from 'moment'
 import moment from "moment-timezone";
 moment.tz.setDefault("America/Guatemala");
@@ -251,7 +237,6 @@ export default {
       search: "",
       modalcliente: false,
       clienteencontrado: true,
-      ventaCredito:false,
       headers: [
         { text: "Cod.", align: "center", value: "codigo" },
         { text: "Nombre", value: "nombre" },
@@ -261,32 +246,32 @@ export default {
         { text: "Actions", align: "center", value: "actions", sortable: false },
       ],
       carrito: [],
-      tipo: ["Factura", "Proforma", "Recibo"],
+      tipo: ["Factura","Proforma","Recibo"],
       editedItemCliente: {
         nombre: "CONSUMIDOR FINAL",
         nit: "CF",
         direccion: "JALAPA",
       },
-      defaultItemCliente: {
+      defaultItemCliente:{
         nombre: "CONSUMIDOR FINAL",
         nit: "CF",
         direccion: "JALAPA",
       },
-      carritoObj: {
-        cantidad: 1,
-        preciocompra: 0,
-        descuento: 0,
-        precioventa: 0,
-        total: 0,
-        idarticulo: 1,
+      carritoObj:{
+        cantidad:1,
+        preciocompra:0,
+        descuento:0,
+        precioventa:0,
+        total:0,
+        idarticulo:1,
       },
-      cleancarritoObj: {
-        cantidad: 1,
-        preciocompra: 0,
-        descuento: 0,
-        precioventa: 0,
-        total: 0,
-        idarticulo: 1,
+      cleancarritoObj:{
+        cantidad:1,
+        preciocompra:0,
+        descuento:0,
+        precioventa:0,
+        total:0,
+        idarticulo:1,
       },
       editedItem: {
         idpersona: 1,
@@ -310,7 +295,7 @@ export default {
         total: 0,
         tipo: "Recibo",
       },
-      idventa: false,
+      idventa:false,
     };
   },
   async created() {
@@ -331,118 +316,96 @@ export default {
       );
     },
     totalDescuento() {
-      return currency(
-        this.carrito.reduce(
-          (descuento, current) => descuento + parseFloat(current.descuento),
-          0
-        )
-      );
+      return currency(this.carrito.reduce((descuento, current) => descuento + parseFloat(current.descuento),0));
     },
-    getTokenUser() {
-      return this.$store.getters.getTokenUser;
-    },
+    getTokenUser(){
+      return this.$store.getters.getTokenUser
+    }
   },
   methods: {
     calculos(item) {
-      const producto = this.getProductosActivos.find(
-        (element) => element.idarticulo === item.idarticulo
-      );
-      const index = this.carrito.indexOf(item);
+      const producto = this.getProductosActivos.find(element=>element.idarticulo === item.idarticulo)
+      const index = this.carrito.indexOf(item)
       //Validamos que la cantidad no supere al stock
-      if (producto.stockactual >= this.carrito[index].cantidad) {
-        this.carrito[index].total =
-          parseFloat(item.cantidad) * parseFloat(item.precio_venta) -
-          parseFloat(item.descuento);
-      } else {
-        item.cantidad = parseFloat(producto.stockactual);
-        Swal.fire(
-          "Cantidad maxima que puede vender es de " + producto.stockactual
-        );
+      if(producto.stockactual>=this.carrito[index].cantidad){
+        this.carrito[index].total = (parseFloat(item.cantidad)*parseFloat(item.precio_venta))-parseFloat(item.descuento)
+      }else{
+        item.cantidad=parseFloat(producto.stockactual)
+        Swal.fire("Cantidad maxima que puede vender es de "+producto.stockactual);
       }
-      //Validamos que el precio de venta no supere al preciominimo
-
-      if (
-        parseFloat(this.carrito[index].precioventa) <
-        parseFloat(producto.preciominimo)
-      ) {
-        item.precioventa = producto.preciominimo;
-        Swal.fire(
-          "El precio minimo del producto es Q " + producto.preciominimo
-        );
+      //Validamos que el precio de venta no supere al preciominimo 
+     
+      if(parseFloat(this.carrito[index].precioventa)<parseFloat(producto.preciominimo)){
+        item.precioventa=producto.preciominimo
+        Swal.fire("El precio minimo del producto es Q "+producto.preciominimo);
       }
-      console.log(this.carrito[index].descuento.length);
-      if (this.carrito[index].descuento.length == 0) {
-        item.descuento = 0;
+        console.log(this.carrito[index].descuento.length)
+      if(this.carrito[index].descuento.length==0){
+        item.descuento=0;
         Swal.fire("El campo descuento no puede estar vacio");
       }
     },
     async initialize() {
       await this.$store.dispatch("setProductos");
       await this.$store.dispatch("setClientes");
-      await this.$store.dispatch("setAllVentas");
+      await this.$store.dispatch('setAllVentas')  
       this.$store.dispatch("setNavigation");
-      this.buscarVentaPorTipo();
+      this.buscarVentaPorTipo()
     },
     async postVenta() {
-      if (!this.procesardatos) {
-        this.procesardatos = true;
-        this.parsearValores();
-        const respuesta = await this.$store.dispatch(
-          "createVenta",
-          this.editedItem
-        );
-        if (respuesta.status > 299)
-          this.errorSwal("Error al registrar la venta");
-        this.idventa = respuesta.data.idventa;
-        await this.createDetalleVenta();
+      
+      if(!this.procesardatos){
+        this.procesardatos = true
+        this.parsearValores()
+        const respuesta = await this.$store.dispatch("createVenta",this.editedItem)
+        if(respuesta.status>299)this.errorSwal("Error al registrar la venta")
+        this.idventa = respuesta.data.idventa
+        await this.createDetalleVenta()
       }
+      
     },
-    async createDetalleVenta() {
+    async createDetalleVenta(){
       let errores = false;
-      this.carrito.forEach((item) => {
-        item.idventa = parseInt(this.idventa);
-        item.cantidad = parseInt(item.cantidad);
-        item.preciocompra = parseFloat(item.preciocompra);
-        item.descuento = parseFloat(item.descuento);
-        item.precioventa = parseFloat(item.precioventa);
-        item.idarticulo = parseInt(item.idarticulo);
+       this.carrito.forEach(item=>{
+         item.idventa = parseInt(this.idventa)
+         item.cantidad=parseInt(item.cantidad)
+         item.preciocompra=parseFloat(item.preciocompra)
+         item.descuento=parseFloat(item.descuento)
+         item.precioventa=parseFloat(item.precioventa)
+         item.idarticulo=parseInt(item.idarticulo)
 
-        const res = axios.post(
-          `${this.$store.state.urlapi}/ventadetalles/`,
-          item,
-          this.getTokenUser
-        );
-        if (res.status > 299) errores = true;
-      });
-      if (errores) this.errorSwal("Error al generar factura");
-      else {
-        //Actualizamos el stock si es una factura ó Recibo
-        if (this.editedItem.tipo != "Proforma") {
-          await this.$store.dispatch("updateStockVenta", this.idventa);
-          await this.$store.dispatch("setProductos");
-        }
+         const res =  axios.post(`${this.$store.state.urlapi}/ventadetalles/`,item,this.getTokenUser) 
+         if(res.status>299)errores=true;       
+       })
+       if(errores)this.errorSwal('Error al generar factura');
+       else{
+         //Actualizamos el stock si es una factura ó Recibo
+         if(this.editedItem.tipo!='Proforma'){
+           await this.$store.dispatch('updateStockVenta',this.idventa)
+           await this.$store.dispatch("setProductos");
+           }
 
-        this.procesardatos = false;
-        this.printSwal();
-        this.clearData();
-        this.modalcliente = false;
-      }
+         this.procesardatos = false;
+         this.printSwal()
+         this.clearData()
+         this.modalcliente=false;
+       }
     },
-    parsearValores() {
-      this.editedItem.cliente = this.editedItemCliente.nombre;
-      this.editedItem.total = parseFloat(this.sumatoria.value);
-      this.editedItem.numero = parseInt(this.editedItem.numero);
-      this.editedItem.anticipo = parseInt(this.editedItem.anticipo);
-      this.editedItem.idpersona = parseInt(this.editedItem.idpersona);
-      this.editedItem.descuento = this.totalDescuento.value;
+    parsearValores(){
+      this.editedItem.cliente = this.editedItemCliente.nombre
+      this.editedItem.total = parseFloat(this.sumatoria.value)
+      this.editedItem.numero = parseInt(this.editedItem.numero)
+      this.editedItem.anticipo = parseInt(this.editedItem.anticipo)
+      this.editedItem.idpersona = parseInt(this.editedItem.idpersona)
+      this.editedItem.descuento = this.totalDescuento.value
       this.editedItem.carrito = this.carrito;
     },
-    clearData() {
+    clearData(){
       //defaultItemCliente
       //const data = this.$store.getters.getClientes('CF');
       this.editedItem = Object.assign({}, this.defaultItem);
       this.editedItemCliente = Object.assign({}, this.defaultItemCliente);
-      this.carrito = [];
+      this.carrito=[]
     },
     async buscarCliente() {
       const data = this.$store.getters.getClientes(
@@ -469,30 +432,28 @@ export default {
       //Buscamos nuevamente el cliente invocando al metodo buscarCliente
       await this.buscarCliente();
     },
-    //METODOS PARA AGREGAR Y ELIMINAR ELEMENTOS DEL CARRITO
+    //METODOS PARA AGREGAR Y ELIMINAR ELEMENTOS DEL CARRITO 
     pusCarrito(item) {
-      const articulo = this.carrito.find(
-        (elemento) => elemento.idarticulo == item.idarticulo
-      );
+      const articulo = this.carrito.find(elemento=>elemento.idarticulo ==item.idarticulo );
       //Si es diferente de vacio que inserte el producto
       if (!articulo) {
-        this.carritoObj.nombre = item.nombre;
-        this.carritoObj.cantidad = parseInt(1);
-        this.carritoObj.preciocompra = item.preciocompra;
-        this.carritoObj.descuento = parseFloat(0.0);
-        this.carritoObj.precioventa = parseFloat(item.preciosugerido);
-        this.carritoObj.total =
-          this.carritoObj.cantidad * this.carritoObj.precioventa;
-        this.carritoObj.idarticulo = parseInt(item.idarticulo);
+        this.carritoObj.nombre= item.nombre
+        this.carritoObj.cantidad= parseInt(1)
+        this.carritoObj.preciocompra=item.preciocompra
+        this.carritoObj.descuento= parseFloat(0.00)
+        this.carritoObj.precioventa=parseFloat(item.preciosugerido)
+        this.carritoObj.total=(this.carritoObj.cantidad*this.carritoObj.precioventa)
+        this.carritoObj.idarticulo=parseInt(item.idarticulo)
         this.carrito.push(this.carritoObj);
       } else {
-        this.addItemCart(articulo, item);
+        this.addItemCart(articulo,item);
       }
-      this.carritoObj = Object.assign({}, this.cleancarritoObj);
+      this.carritoObj = Object.assign({}, this.cleancarritoObj)      
     },
-    addItemCart(articulo, item) {
+    addItemCart(articulo,item) {
+     
       if (item.stockactual > articulo.cantidad) {
-        articulo.cantidad++;
+        articulo.cantidad++
       } else {
         Swal.fire("Cantidad supera a las existencias");
       }
@@ -501,38 +462,38 @@ export default {
       const index = this.carrito.indexOf(item);
       this.carrito.splice(index, 1);
     },
-    printSwal() {
-      Swal.fire({
-        icon: "success",
-        title: "La Factura Fue Emitida Exitosamente",
-        showCloseButton: true,
-        confirmButtonText: `IMPRIMIR FACTURA`,
-      }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
-        if (result.isConfirmed) {
-          this.$store.dispatch("printDocument", this.idventa);
-        }
-      });
+    printSwal(){
+          Swal.fire({
+              icon:'success',
+              title:'La Factura Fue Emitida Exitosamente',
+              showCloseButton: true,
+              confirmButtonText: `IMPRIMIR FACTURA`,
+          }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+              this.$store.dispatch('printDocument',this.idventa);
+            }
+            })
+          
     },
-    buscarVentaPorTipo() {
-      const ventas = this.$store.getters.getAllVentas;
+    buscarVentaPorTipo(){
+      const ventas = this.$store.getters.getAllVentas
       //Si el Tipo es = Factura le Asignamos serie B
-      if (this.editedItem.tipo == "Factura") this.editedItem.serie = "B";
-      else this.editedItem.serie = "";
+      if(this.editedItem.tipo=='Factura')this.editedItem.serie='B'
+      else this.editedItem.serie=''
 
-      if (ventas) {
+      if(ventas){
         //Filtramos las ventas por tipo
-        const filtro = ventas.filter(
-          (elemento) => elemento.tipo == this.editedItem.tipo
-        );
-        if (!filtro) this.editedItem.numero = 1;
-        else {
+        const filtro = ventas.filter(elemento=>elemento.tipo==this.editedItem.tipo)
+        if(!filtro)this.editedItem.numero = 1
+        else{
           //Buscamos el ultimo numero del tipo de documento
-          const numeroSiguiente = filtro.sort((item1, item2) => {
-            return parseInt(item2.numero) - parseInt(item1.numero);
-          });
-          this.editedItem.numero = parseInt(numeroSiguiente[0].numero) + 1;
+          const numeroSiguiente = filtro.sort((item1,item2)=>{
+                    return parseInt(item2.numero)-parseInt(item1.numero)
+                  })
+          this.editedItem.numero = parseInt(numeroSiguiente[0].numero)+1      
         }
+
       }
     },
     //Notificaciones Swal
@@ -562,8 +523,8 @@ export default {
 };
 </script>
 <style scoped>
-.main {
-  margin-top: -10px;
+.main{
+  margin-top:-10px;
   height: 100vh;
 }
 </style>

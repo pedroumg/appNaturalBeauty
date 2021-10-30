@@ -1,15 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateCategoriaDto, EditCategoriaDto } from './DTO';
 import { CategoriaEntity } from './Entity';
 
 @Injectable()
 export class CategoriaService {
-    constructor(
-        @InjectRepository(CategoriaEntity) private readonly categoriaRepository:Repository<CategoriaEntity>,
-        private connection : Connection
-        ){}
+    constructor(@InjectRepository(CategoriaEntity) private readonly categoriaRepository:Repository<CategoriaEntity>){}
 
     async getAllItems(){
         const data = await this.categoriaRepository.find()
@@ -18,25 +15,12 @@ export class CategoriaService {
         
     }
     async posttItem(dto:CreateCategoriaDto){
-
-        const queryRunner = this.connection.createQueryRunner();
-        await queryRunner.connect();
-        await queryRunner.startTransaction();
-
         try {
             const data = this.categoriaRepository.create(dto)
-            const respuesta = await queryRunner.manager.save(data)
-            await queryRunner.commitTransaction();
-            return respuesta
+            return await this.categoriaRepository.save(data)
         } catch (error) {
-            await queryRunner.rollbackTransaction();
             return error;
-        } finally {
-            // you need to release a queryRunner which was manually instantiated
-            await queryRunner.release();
         }
-
-
     }
     async putItem(idcategoria:number,dto:EditCategoriaDto){
         try {

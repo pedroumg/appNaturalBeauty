@@ -1,5 +1,4 @@
 import { IsInt, IsNumber, IsOptional, IsPositive } from "class-validator";
-import { VentasEntity } from '../../ventas/Entity/ventas.entity';
 
 export class CreateVentaDetalleDto{
     @IsNumber()
@@ -19,9 +18,7 @@ export class CreateVentaDetalleDto{
     precioventa:number;
 
     @IsInt()
-    @IsOptional()
     idventa:number;
-    
     @IsInt()
     idarticulo:number;
 }

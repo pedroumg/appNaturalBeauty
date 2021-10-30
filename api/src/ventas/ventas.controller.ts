@@ -3,7 +3,6 @@ import { ApiTags } from '@nestjs/swagger';
 import { Auth } from 'src/common/decorators';
 import { CreateVentasDto, EditVentasDto } from './DTO';
 import { VentasService } from './ventas.service';
-import { CreateVentaDetalleDto } from '../ventadetalle/DTO/create-ventadetalle.dto';
 
 @ApiTags('Api Ventas')
 @Auth()
@@ -15,7 +14,7 @@ export class VentasController {
         return  await this.ventasService.getAllItems()
     }
     @Post()
-    async createItem(@Body() dto:CreateVentasDto,){
+    async createItem(@Body() dto:CreateVentasDto){
         return await this.ventasService.postItem(dto)
     }
     @Put(':id')

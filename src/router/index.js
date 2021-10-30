@@ -3,8 +3,7 @@ import vuex from '../store/index'
 import VueRouter from 'vue-router'
 import LoginUser from '@/components/Auth/LoginUser.vue'
 import Categorias from '../components/Categorias/Categorias.vue'
-import Clientes from '../components/Clientes/Clientes.vue'
-import Proveedores from '../components/Proveedores/Proveedores.vue'
+import Clientes from '../components/Personas/Clientes.vue'
 import Productos from '../components/Productos/Productos.vue'
 import Almacen from '../components/Almacen.vue'
 import Usuarios from '../components/Usuarios/Usuarios.vue'
@@ -35,13 +34,21 @@ const router = new VueRouter({
     path: '/categorias',
     name: 'Categorias',
     component:Categorias,
-    meta:{autenticado:true}, 
+    meta:{autenticado:true},   
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    //component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
     path: '/almacen',
     name: 'Almacen',
     component:Almacen,
-    meta:{autenticado:true},
+    meta:{autenticado:true},   
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    //component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
     path: '/productos',
@@ -59,12 +66,6 @@ const router = new VueRouter({
     path: '/clientes',
     name: 'Clientes',
     component:Clientes,
-    meta:{autenticado:true},   
-  },
-  {
-    path: '/proveedores',
-    name: 'Proveedores',
-    component:Proveedores,
     meta:{autenticado:true},   
   },
   {

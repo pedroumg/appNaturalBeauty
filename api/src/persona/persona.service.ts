@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Equal, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreatePersonaDto, EditPersonaDto } from './DTO';
 import { PersonaEntity } from './Entity';
 
@@ -8,9 +8,8 @@ import { PersonaEntity } from './Entity';
 export class PersonaService {
     constructor(@InjectRepository(PersonaEntity) private readonly personaRepository:Repository<PersonaEntity> ){}
 
-    async getAllItems(tipo:string){
-        const data = await this.personaRepository.find({ where:{tipo:tipo} })
-        //console.log(data)
+    async getAllItems(){
+        const data = await this.personaRepository.find()
         if(!data[0])throw new NotFoundException('No se encontraron registros')
         return data;
     }

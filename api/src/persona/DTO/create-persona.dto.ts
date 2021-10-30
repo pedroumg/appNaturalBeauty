@@ -15,7 +15,7 @@ export class CreatePersonaDto{
     telefono:string;
     @IsString()
     @IsOptional()
-    tipo:string;
+    tipo_persona:string;
     @IsString()
     @IsOptional()
     estado:string;

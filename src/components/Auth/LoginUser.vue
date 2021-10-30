@@ -7,8 +7,9 @@
                 <div class="col-lg-5 col-md-12 col-sm-12 col-pad-0 bg-img align-self-center none-992">
                     
                     <a href="login-17.html">
-                        <img src="@/assets/loginfel.png" width="70%" alt="logo"> 
+                        <img src="@/assets/loginfel.jpg" width="70%" alt="logo"> 
                     </a>
+                    <h3 style="color:white">Natural Beauty</h3>
                     <p>Sistema de Facturación</p>
                     
                 </div>

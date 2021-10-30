@@ -1,19 +1,8 @@
-import { IsNumber,IsInt, IsOptional, IsPositive, IsString, IsDate, IsArray } from "class-validator";
-import { CreateVentaDetalleDto } from '../../ventadetalle/DTO/create-ventadetalle.dto';
-
+import { IsNumber,IsInt, IsOptional, IsPositive, IsString } from "class-validator";
 
 export class CreateVentasDto{
-
-    @IsNumber()
-    @IsOptional()
-    idventa:number;
-    
     @IsString()
     cliente:string;
-
-    @IsDate()
-    @IsOptional()
-    fechaentrega:Date
 
     @IsNumber()
     @IsPositive()
@@ -38,10 +27,6 @@ export class CreateVentasDto{
     @IsString()
     @IsOptional()
     tipo:string;
-
-    @IsString()
-    @IsOptional()
-    tipopago:string;
     
     @IsString()
     @IsOptional()
@@ -50,7 +35,4 @@ export class CreateVentasDto{
     idpersona:number;
     @IsInt()
     idusuario:number;
-
-    @IsArray()
-    venta:CreateVentaDetalleDto[];
 }
